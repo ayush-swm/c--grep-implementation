@@ -31,46 +31,6 @@ bool isalphaNum(char c){
 	return false;
 }
 
-bool matchNonRegularExpression(string lineData, string patternToSearch, int& flag){
-	if(flag&IGNORE_CASE){		
-    	for(int i=0;i<lineData.size();i++){
-    		lineData[i] = tolower(lineData[i]);
-		}
-		for(int i=0;i<patternToSearch.size();i++){
-    		patternToSearch[i] = tolower(patternToSearch[i]);
-		}
-	}
-	if((flag&MATCH_WHOLE_WORD)==0){
-		return lineData.find(patternToSearch)!=string::npos;
-	}
-	stringstream ss(lineData);
-	string comp;
-	while(ss>>comp){
-		int loc = comp.find(patternToSearch);
-		if(loc==string::npos)
-		continue;
-		bool valid=true;
-		for(int i=0;i<loc;i++){
-			if(isalphaNum(comp[i])){
-				valid=false;
-				break;
-			}
-		}
-		if(valid==false)
-			continue;
-		for(int i=loc+patternToSearch.size();i<comp.size();i++){
-			if(isalphaNum(comp[i])){
-				valid=false;
-				break;
-			}
-		}
-		if(valid==false)
-			continue;
-		return true;
-	}
-	return false;
-}
-
 void printMatch(int& flag, string patternToSearch, string fileName){
 	ifstream file;
     file.open(fileName.c_str());
@@ -81,11 +41,24 @@ void printMatch(int& flag, string patternToSearch, string fileName){
     regex expr = flag&IGNORE_CASE ? regex(patternToSearch, regex_constants::icase) : regex(patternToSearch); 
 	string lineData="";
 	int lineNo=0;
-	while(getline(file, lineData)){;
+	while(getline(file, lineData)){
 		lineNo++;
-		bool match = regex_match(lineData, expr);
-		if(match==false){
-			match = matchNonRegularExpression(lineData, patternToSearch, flag);
+		bool match = false;
+		smatch matchingWord;
+		if((flag&MATCH_WHOLE_WORD)==0){
+			match = regex_search (lineData, matchingWord, expr);
+		}
+		else{
+			string lineToMatch = lineData;
+			while (regex_search (lineToMatch, matchingWord, expr)) {
+		        string temp = matchingWord[0];
+		        int start = matchingWord.position();
+		        if( ( start==0 || !isalphaNum(lineToMatch[start-1]) ) &&  (start+temp.size()==lineToMatch.size() || !isalphaNum(lineToMatch[start+temp.size()]) ) ){
+		        	match = true;
+		        	break;
+				}
+		        lineToMatch = matchingWord.suffix();
+		    }
 		}
 		if(flag&INVERT_MATCH){
 			if(match==false){
