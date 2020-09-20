@@ -15,3 +15,9 @@
 	  - -i --ignore-case : ignore case in patern and file
 	  - -w --word-regexp : match whole word
 	  - -n --line-number : prefix line number in each output
+	  
+	  
+running code example	  
+![](assets/RunningProgrameScreenshot.PNG)	 
+	 
+	 
