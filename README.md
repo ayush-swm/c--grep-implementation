@@ -7,9 +7,11 @@
    
 - Run program
    you have 3 option
-   1. help - to see all valid command
-   2. exit - to terminate programme.
-   3. type query to search in file.
-      eg. line input.txt
-      eg. -w line input.txt
-      eg. -i -n line input.txt
+   - help - to see all valid command
+   - exit - to terminate programme.
+   - type query to search in file.
+   - valid option
+	  - -v --invert-match : invert sense of matching
+	  - -i --ignore-case : ignore case in patern and file
+	  - -w --word-regexp : match whole word
+	  - -n --line-number : prefix line number in each output
