@@ -26,7 +26,7 @@ void prinHelp() {
 }
 
 bool isalphaNum(char c) {
-	if((c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='_') {
+	if((c >= 'a' &&  c<= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_') {
 	    return true;
 	}
 	return false;
@@ -34,13 +34,13 @@ bool isalphaNum(char c) {
 
 void printMatch(int& flag, string patternToSearch, string fileName) {
 	ifstream file;
-    file.open(fileName.c_str());
+	file.open(fileName.c_str());
     if (!file) {
        cout<<"File " + fileName + " not present at current directory."<<endl;
        return;
     }
     regex expr = flag & IGNORE_CASE ? regex(patternToSearch, regex_constants::icase)
-	        : regex(patternToSearch); 
+			: regex(patternToSearch); 
 	string lineData="";
 	int lineNo=0;
 	while (getline(file, lineData)) {
